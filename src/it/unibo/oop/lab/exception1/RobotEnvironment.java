@@ -6,7 +6,7 @@ package it.unibo.oop.lab.exception1;
  * 
  */
 public class RobotEnvironment {
-
+	
     /**
      * Environment upper bound for the X coordinate.
      */
