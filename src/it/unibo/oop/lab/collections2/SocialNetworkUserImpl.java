@@ -1,7 +1,10 @@
 package it.unibo.oop.lab.collections2;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 
@@ -29,6 +32,7 @@ public class SocialNetworkUserImpl<U extends User> extends UserImpl implements S
      * 
      * think of what type of keys and values would best suit the requirements
      */
+	final Map<String , List<U>> followedUser;
 
     /*
      * [CONSTRUCTORS]
@@ -56,6 +60,7 @@ public class SocialNetworkUserImpl<U extends User> extends UserImpl implements S
      */
     public SocialNetworkUserImpl(final String name, final String surname, final String user, final int userAge) {
         super(name, surname, user, userAge);
+        this.followedUser = new HashMap<>();
     }
 
     /*
@@ -64,19 +69,69 @@ public class SocialNetworkUserImpl<U extends User> extends UserImpl implements S
      * Implements the methods below
      */
 
-    @Override
+    /**
+     * {@inheritDoc}
+     */
     public boolean addFollowedUser(final String circle, final U user) {
+    	
+    	if(!this.userExist(user)) {
+    		
+    		// Create a new circle if it doesn't exists
+    		if(!this.circleExists(circle)) {
+    			this.followedUser.put(circle, new ArrayList<>());
+    		}
+    		
+    		/*
+    		 * Get the followed user circle list
+    		 * and add the new user to this
+    		 */
+    		List<U> followedUserCircle = this.followedUser.get(circle);
+    		followedUserCircle.add(user);
+    	
+    		return true;
+    	}
+    	
         return false;
     }
-
-    @Override
+    
+    /**
+     * Check if a given user exists
+     * @param user to be checked
+     * @return true if an user exists in one of the listed circle
+     */
+    private boolean userExist(final U user) {
+    	
+    	for (List<U> userGroup : this.followedUser.values()) {
+    		if(userGroup.contains(user)) {
+    			return true;
+    		}	
+    	}
+    	return false;
+    }
+    
+    /**
+     * {@inheritDoc}
+     */
     public Collection<U> getFollowedUsersInGroup(final String groupName) {
-        return null;
+    	
+        return this.circleExists(groupName) ? this.followedUser.get(groupName) : List.of();
     }
 
-    @Override
+    /**
+     * Check if a given circle exists
+     * @param circle to be checked
+     * @return true if a circle exists 
+     */ 
+    private boolean circleExists(final String circle) {
+    	return this.followedUser.containsKey(circle);
+    }
+    
+    
+    /**
+     * {@inheritDoc}
+     */
     public List<U> getFollowedUsers() {
-        return null;
+        return (List<U>) this.followedUser.values();
     }
 
 }
