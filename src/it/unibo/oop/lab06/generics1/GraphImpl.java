@@ -5,7 +5,7 @@ import java.util.*;
 
 public class GraphImpl<N> implements Graph<N> {
 	
-	private Map<N, Set<N>> graphMapper;
+	private final Map<N, Set<N>> graphMapper;
 
 	
 	public GraphImpl(Map<N, Set<N>> map) {
@@ -61,28 +61,20 @@ public class GraphImpl<N> implements Graph<N> {
 	 * @return the path from source to target
 	 */
 	public List<N> getPath(N source, N target) {
-
-		// Output list
 		List<N> outputList = new LinkedList<>();
-		
-		// DFS
 		findUtility(source, target, (LinkedList<N>) outputList, new HashMap<>());
-		
 		return outputList;
 	}
 
 	private void findUtility(N node, N target, LinkedList<N> list, Map<N, Boolean> exploredNodes) {
 		
 		exploredNodes.put(node, true);
-		
 		if(!list.contains(target)) {
 			list.add(node);
 		}
-		
 		if(node == target) {
 			return;
 		}
-		
 		Iterator<N> iterator = this.graphMapper.get(node).iterator();
 		while(iterator.hasNext()) {
 			N adjacentEdge = iterator.next();
@@ -90,7 +82,6 @@ public class GraphImpl<N> implements Graph<N> {
 				findUtility(adjacentEdge, target, list, exploredNodes);
 			}
 		}
-		
 		if(!list.contains(target)) {
 			list.removeLast();
 		}
