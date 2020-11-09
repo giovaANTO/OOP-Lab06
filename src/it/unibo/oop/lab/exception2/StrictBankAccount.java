@@ -59,8 +59,6 @@ public class StrictBankAccount implements BankAccount {
     public void depositFromATM(final int usrID, final double amount) {
     	this.checkTransactionLimit();
         this.deposit(usrID, amount - StrictBankAccount.ATM_TRANSACTION_FEE);
-        nTransactions++;
-        
     }
 
     /**
@@ -114,7 +112,7 @@ public class StrictBankAccount implements BankAccount {
     }
     
     private void checkTransactionLimit() {
-    	if (this.nTransactions < this.nMaxATMTransactions) {
+    	if (this.nTransactions >= this.nMaxATMTransactions) {
     		throw new TransactionsOverQuotaException();
     	}
     }
